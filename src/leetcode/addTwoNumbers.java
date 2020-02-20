@@ -20,58 +20,79 @@ class ListNode {
 }
 
 class Solution2 {
-	/* 将ListNode转化为数字 */
-	static long convertListNodeToInteger(ListNode l)
-	{
-		int mul = 1;
-		long result = 0;
-		ListNode p = l;
-		
-		while(p != null)
-		{
-			System.out.println("p.val"+p.val+" result:"+result);
-			result = result + p.val * mul;
-			mul *= 10;
-			p = p.next;
-		}
-		System.out.println("\n");
-		return result;
-	}
-	
-	/* 使用尾插法将整数转化为链表 */
-	static ListNode convertIntegerToListNode(ListNode l, long value)
-	{
-		//System.out.println(value);
-		int last = 0; 
-		long remain = value;
-		ListNode p = l;
-		
-		do
-		{
-			last = (int)(remain % 10);
-			p.val = last;
-			//System.out.println(remain);
-			remain /= 10;
-			if(remain != 0)
-			{
-				p.next = new ListNode(0);
-				p = p.next;
-			}
-			else
-			{
-				p.next = null;
-			}
-		}
-		while(remain != 0);
-		return l;
-	}
-	
     public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        long v1 = convertListNodeToInteger(l1);
-        long v2 = convertListNodeToInteger(l2);
-        ListNode l = new ListNode(0);
-        convertIntegerToListNode(l,(long)(v1 + v2));
-        return l;
+       ListNode result = new ListNode(0);
+       ListNode p = l1;
+       ListNode q = l2;
+       ListNode r = result;
+       int bitsum = 0;
+	   int flag = 0;
+	   
+       for(p = l1,q = l2;p != null && q != null;p = p.next,q=q.next)
+       {
+    	   bitsum = p.val + q.val + flag;
+    	   if(bitsum >= 10)
+    	   {
+    		   bitsum -= 10;
+    		   flag = 1;
+    	   }
+    	   else
+    	   {
+    		   flag = 0;
+    	   }
+    	   r.val = bitsum;
+    	   if(p.next == null && q.next == null && flag == 0)
+    	   {
+    		   r.next = null;
+    		   return result;
+    	   }
+    	   else
+    	   {
+    		   r.next = new ListNode(0);
+    		   r = r.next;
+    	   }
+       }
+       if(q != null)
+       {
+    	   p = q;
+       }
+     
+       while(p != null || flag != 0)
+       {
+    	   if(p == null)
+    	   {
+    		   bitsum = flag;
+    	   }
+    	   else
+    	   {
+    	       bitsum = p.val + flag;
+    	   }
+    	   if(bitsum >= 10)
+    	   {
+    		   bitsum -= 10;
+    		   flag = 1;
+    	   }
+    	   else
+    	   {
+    		   flag = 0;
+    	   }
+    	   r.val = bitsum;
+    	   if((p == null || p.next == null) && flag == 0)
+    	   {
+    		   r.next = null;
+    		   return result;
+    	   }
+    	   else
+    	   {
+    		   r.next = new ListNode(0);
+    		   r = r.next;
+    	   }
+    	   if(p != null)
+    	   {
+    		   p = p.next;
+    	   }
+       }
+       return result;
     }
     
     public static void main(String[] s)
@@ -79,15 +100,20 @@ class Solution2 {
     	ListNode l1 = new ListNode(0);
     	ListNode l2 = new ListNode(0);
   
-    	l1 = convertIntegerToListNode(l1,9);
+    	l1 = convertIntegerToListNode(l1,465);
     	l2 = convertIntegerToListNode(l2,9999999991L);
-    	
+    	/*ListNode p = l2;
+    	while(p != null)
+    	{
+    		System.out.println(p.val);
+    		p = p.next;
+    	}*/
     	//long result1 = convertListNodeToInteger(l1);
     	//System.out.println(result1);
-    	//long result2 = convertListNodeToInteger(l2);
-    	//System.out.println(result2);
-    	ListNode l3 = addTwoNumbers(l1,l2);
-    	long result = convertListNodeToInteger(l3);
+    	long result2 = convertListNodeToInteger(l2);
+    	System.out.println(result2);
+    	//ListNode l3 = addTwoNumbers(l1,l2);
+    	//long result = convertListNodeToInteger(l3);
     	
     	//System.out.println("result1 + result2 = "+(result1+result2));
     	
